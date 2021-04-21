@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jquery Todo List</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+
+    <!--
+    <style>
+        #todo{}
+        .todo{}
+        [id='todo']{}
+        [class='todo']{}
+    </style>
+    -->
+    <style>
+        #todo-table tbody{}   /* selector */
+    </style>
+</head>
+<body>
+    <div class="container mt-2">
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1">@</span>
+                    <input type="text" class="form-control todo" placeholder="Todo" id="todo" name="todo">
+                    <button type="button" class="btn btn-outline-success" id="add-btn" >
+                        ADD
+                    </button>
+                </div>
+                <table class="table" id="todo-table">
+                    <thead>
+                        <tr class="table-success">
+                            <th scope="col">#</th>
+                            <th scope="col">Todo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+    </div>
+    <script
+        src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+        crossorigin="anonymous"></script>
+
+    <script>
+        $(function(){
+            $('#add-btn').click(()=>{
+                //console.log($('#add-btn')[0]);
+                //val()    form daki taglerde
+                const todo_val = $('input#todo').val().trim();  //trim
+
+                $.ajax({
+                    url       : 'backend.php',
+                    data      : {todo:todo_val},
+                    method    : 'POST', 
+                    dataType  : 'JSON',
+                    beforeSend: function(){
+                        console.log("beforeSend");
+                        $('#add-btn').prop('disabled', true);
+                        //prop() == property     attr() == attribute
+                    }, // ajax istek yapmadan önce çalışır
+                    success   : function(cevap){
+                        console.log("success");
+                        console.log(cevap);
+
+                        document.querySelector("#todo-table tbody") //native javascript
+                        $('#todo-table tbody')   //jquery
+
+                        //vue angular react jquery 
+
+                        const table_count = $('#todo-table tbody tr').length + 1;
+                        if(cevap.status){
+                            $('#todo-table tbody').append(
+                                `
+                                <tr>
+                                    <td>${table_count}</td>
+                                    <td>${todo_val}</td>
+                                </tr>
+                                `
+                            );
+                        }
+
+                        //append
+                        //prepend
+                    },
+                    complete : function(){
+                        console.log("complete method")
+                        $('#add-btn').prop('disabled', false);
+                    },      //ajax istek bittiğini
+                });
+                //$.post()
+                //$.get();
+                //$.ajax()
+
+                //get post delete 
+
+                //const todo = $('[id=todo]').val();
+
+                //const todo = $('.todo').val();
+                //const todo = $("[name=todo]").val();
+
+                //window == this
+            });
+
+            /*
+            $('#add-btn').click(function(){
+                //data data-*   
+                console.log("Callback");
+                console.log($(this));
+
+                $(this).data('name');
+
+
+                $(this).data()
+                console.log()
+
+                //this == element
+            });*/
+        });
+
+        function sum(number1, number2){
+            
+        }
+    </script>
+</body>
+</html>
