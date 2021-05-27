@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- 
+
+        disabled   -- attribute 
+
+    -->
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="col-md-2">
+                        <input type="email" class="form-control" id="step-1" autofocus>
+                    </div>
+                    <div class="col-md-2">
+                        <input type="email" class="form-control" id="step-2" disabled>
+                    </div>
+                    <div class="col-md-2">
+                        <input type="email" class="form-control" id="step-3" disabled>
+                    </div>
+                    <div class="col-md-2">
+                        <input type="email" class="form-control" id="step-4" disabled>
+                    </div>
+                    <div class="col-md-2">
+                        <input type="email" class="form-control" id="step-5" disabled>
+                    </div>
+                    <div class="col-md-2">
+                        <input type="email" class="form-control" id="step-6" disabled>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(function(){
+            
+            $("#step-1, #step-2, #step-3, #step-4, #step-5, #step-6").val('');
+            // 01234
+            //"tekin"
+            //event keyup click keydown mouseover
+            $("#step-1").keyup(function(){
+                nextStep(1);
+                /*
+                const step1Value = $(this).val();       //get
+                const firstMember = step1Value.substring(0,1);
+                console.log(firstMember);
+
+                if(["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"].includes(firstMember)){
+                    $(this).val(firstMember); //set
+                    //$("#step-2").prop("disabled"); //get
+                    $("#step-2").prop("disabled", false).focus();   //set
+                }else{
+                    $(this).val('');
+                }
+                */
+                
+            });
+
+            $("#step-2").keyup(function(){
+                nextStep(2);
+            });
+            $("#step-3").keyup(function(){ 
+                nextStep(3);
+            });
+            $("#step-4").keyup(function(){
+                nextStep(4);
+             });
+            $("#step-5").keyup(function(){
+                nextStep(5);
+             });
+            $("#step-6").keyup(function(){
+                nextStep(6);
+             });
+
+        });
+
+        function nextStep(id){
+            const stepId = "#step-" + id;
+            const step1Value = $(stepId).val();       //get
+            const firstMember = step1Value.charAt(step1Value.length-1);
+            console.log(firstMember);
+
+            if(["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"].includes(firstMember)){
+                $(stepId).val(firstMember); //set
+                //$("#step-2").prop("disabled"); //get
+                if(id < 6){
+                    $("#step-" + (id+1)).prop("disabled", false).focus();   //set
+                }
+                 
+            }else{
+                $(stepId).val('');
+            }
+        }
+    </script>
+</body>
+</html>
