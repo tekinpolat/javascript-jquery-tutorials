@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <div id="app">
+        <ul>
+            <li v-for="(item) in info">
+                {{item}}
+            </li>
+        </ul>
+
+        <hr>
+        <ul>
+            <li v-for="(item, key) in info">
+                {{key}} - {{item}}
+            </li>
+        </ul>
+        <hr>
+
+        <ul>
+            <li v-for="(item, key, index) in info">
+               {{index}} {{key}} {{item}}
+            </li>
+        </ul>
+
+        <hr>
+        <ul>
+            <li v-for="course in  courses">
+                {{course.id}} - {{course.lesson}}
+            </li>
+        </ul>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script>
+
+       
+
+        const app = new Vue({
+            el   : '#app',
+            data : {
+                info : {
+                    name:'Doğan', surname:'GÜÇ', age:27
+                },
+
+                courses : [
+                    {lesson:'Python', id:1},
+                    {lesson:'Java', id:2},
+                    {lesson:'Vue', id:3},
+                ]
+            } 
+        });
+
+
+         /*
+            const info = {
+                name         :"Tekin",
+                surname      :"POLAT",
+                "test-abc"   :"tekin"
+            }
+            const datas = [
+                ["Tekin", "POLAT", 29],    //array
+                ["Doğan", "GÜÇ", 27]       //array 
+            ];
+
+            //datas[0]
+
+            const datas_2 = [
+                {name:'Tekin', surname:'POLAT', age:29},  //object
+                {name:'Doğan', surname:'GÜÇ', age:27},    //object
+            ];
+
+            const numbers = [{}, "tekin", [], 34, true];
+
+            const names = [ "tekin", 34]
+        */
+    </script>
+</body>
+</html>
