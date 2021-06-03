@@ -1,4 +1,53 @@
 {
-  "blogs": [],
+  "blogs": [
+    {
+      "title": "Test1xy",
+      "author": "TEST1 Axy",
+      "content": "CONTETNxy",
+      "id": 1
+    },
+    {
+      "title": "Test2",
+      "author": "TEST2 A",
+      "content": "CONTETN 2",
+      "status": "false",
+      "id": 2
+    },
+    {
+      "title": "Test3",
+      "author": "TEST3 A",
+      "content": "CONTETN 3",
+      "status": "false",
+      "id": 3
+    },
+    {
+      "title": "Test4",
+      "author": "TEST4 A",
+      "content": "CONTETN 4",
+      "status": "false",
+      "id": 4
+    },
+    {
+      "title": "Test5",
+      "author": "TEST5 A",
+      "content": "CONTETN 5",
+      "status": "false",
+      "id": 5
+    },
+    {
+      "title": "Test6",
+      "author": "TEST6 A",
+      "content": "CONTETN 6",
+      "status": "false",
+      "id": 6
+    },
+    {
+      "title": "Deneme Title",
+      "author": "Deneme",
+      "content": "Content",
+      "status": "false",
+      "id": 7
+    }
+  ],
   "comments": []
 }

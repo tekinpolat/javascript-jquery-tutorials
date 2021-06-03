@@ -10,6 +10,13 @@
 </head>
 <body>
     <div class="container mt-2">
+        <div class="row mb-2">
+            <div class="col-md-12">
+                <button class="btn btn-primary float-right" id="add-modal-open">
+                    <i class="far fa-plus-square"></i>
+                </button>
+            </div>
+        </div>
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
@@ -29,6 +36,7 @@
                                 </tr>
                             </thead>
                             <tbody id="blog-tbody">
+
                             </tbody>
                         </table>
                     </div>
@@ -59,6 +67,84 @@
             </div>
         </div>
     </div>
+
+     <!-- Add Modal -->
+     <div class="modal fade" id="blog-add-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Blog Ekleme İşlemi</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="blog-save-form">
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Title</label>
+                            <input type="text" class="form-control" id="title"  placeholder="Title">
+                        </div>
+                        <div class="mb-3">
+                            <label for="author" class="form-label">Author</label>
+                            <input type="text" class="form-control" id="author" placeholder="Author">
+                        </div>
+                        <div class="mb-3">
+                            <label for="content" class="form-label">Content</label>
+                            <textarea class="form-control" id="content" rows="3"></textarea>
+                        </div>
+                        <div id="mb-3">
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-primary" type="submit" >Save</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Edit Modal -->
+    <div class="modal fade" id="blog-edit-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Blog Düzenle İşlemi</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="blog-edit-form">
+                        <input type="hidden" id="blog-id">
+                        <div class="mb-3">
+                            <label for="title-edit" class="form-label">Title</label>
+                            <input type="text" class="form-control" id="title-edit"  placeholder="Title">
+                        </div>
+                        <div class="mb-3">
+                            <label for="author-edit" class="form-label">Author</label>
+                            <input type="text" class="form-control" id="author-edit" placeholder="Author">
+                        </div>
+                        <div class="mb-3">
+                            <label for="content-edit" class="form-label">Content</label>
+                            <textarea class="form-control" id="content-edit" rows="3"></textarea>
+                        </div>
+                        <div id="mb-3">
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-primary" type="submit" >Edit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
     
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js" ></script>
@@ -68,6 +154,82 @@
         //$(()=>{  })
         const API_URL = 'http://localhost:3000';
         $(function(){
+
+            getBlogs();
+            //blog edit son adım
+            $("form#blog-edit-form").submit(function(event){
+                event.preventDefault();
+                const id = $("#blog-id").val();
+                const title = $("#title-edit").val();
+                const author = $("#author-edit").val();
+                const content = $("#content-edit").val();
+
+                $.ajax({
+                    url      : `${API_URL}/blogs/${id}`,
+                    data     : {title, author, content},
+                    method   : 'PUT',
+                    dataType : 'JSON',
+                    success  : function(response){
+                        $("#blog-edit-modal").modal('hide');
+                        getBlogs();
+                    },
+                    error : function(){
+
+                    }
+                });
+            });
+            //blog edit modal açma
+            $(document).on('click', '.blog-edit-button', function(){
+                const id    = $(this).data('id');
+                const title = $(this).data('title');
+                const author = $(this).data('author');
+                const content = $(this).data('content');
+
+                $("#title-edit").val(title);
+                $("#author-edit").val(author);
+                $("#content-edit").val(content);
+                $("#blog-id").val(id);
+                $("#blog-edit-modal").modal('show');
+            });
+
+            //$(".blog-edit-button").on('click', function(){});
+
+            $("form#blog-save-form").on('submit', function(event){
+                event.preventDefault();
+                const title   = $("#title").val().trim();
+                const author  = $("#author").val().trim();
+                const content = $("#content").val().trim();
+
+                const ajaxData = {
+                    url     : `${API_URL}/blogs`,
+                    data    : {title, author, content, status:false},
+                    method  : 'POST',
+                    dataType : 'JSON',
+                    success : function(response, textStatus, jqXHR){
+                        $("#blog-add-modal").modal('hide');
+                        getBlogs();
+                        /*
+                            $("#title").val('');
+                            $("#author").val('');
+                            $("#content").val('');
+
+                            $("#title,#author, #content").val('');
+                        */
+
+                        $("#blog-save-form")[0].reset();
+                    },
+                    error : function(){
+
+                    }
+                };
+                $.ajax(ajaxData);
+                //return false;
+            });
+
+            $("#add-modal-open").on('click', function(){
+                $("#blog-add-modal").modal('show')
+            });
+
             //blog sil son adım
             $('#blog-delete-last-step-button').on('click', function() {
                 const id = $(this).attr('data-blog-id');
@@ -84,6 +246,24 @@
                 })
             });
 
+            
+
+            //blog silme modal açma işlemi
+            $('#blog-tbody').on('click', '.blog-delete-button', function(){
+                const title = $(this).data('title');
+                const id    = $(this).data('id');
+                $('#blog-delete-last-step-button').attr('data-blog-id', id);
+                //$('#blog-delete-last-step-button').data('blog-id', id);
+                $("#blog-delete-modal").modal('show');
+                $('.modal-body').html(
+                    `
+                     <b class="badge bg-danger">${title}</b> isimli blogu silmek istediğinize emin misiniz?
+                    `
+                )
+            });
+        });
+
+        function getBlogs(){
             //blogları getir
             $.ajax({
                 url     : `${API_URL}/blogs`,
@@ -92,6 +272,8 @@
                     //console.log(response);
                     //for in, for of, forEach   [1,2,4]
                     let status = '';
+                    $('#blog-tbody').html('');
+
                     response.forEach(function(item, index){
                         //console.log(item, index)
                         
@@ -113,6 +295,10 @@
                                         <button type="button" class="btn btn-outline-danger btn-sm blog-delete-button" data-id="${item.id}" data-title="${item.title}">
                                             <i class="far fa-trash-alt"></i>
                                         </button>
+                                        <button type="button" class="btn btn-outline-warning btn-sm blog-edit-button" 
+                                                data-id="${item.id}" data-title="${item.title}" data-author="${item.author}" data-content="${item.content}">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
                                     </td>    
                                 </tr>
                             `
@@ -123,21 +309,8 @@
 
                 }
             });
-
-            //blog silme modal açma işlemi
-            $('#blog-tbody').on('click', '.blog-delete-button', function(){
-                const title = $(this).data('title');
-                const id    = $(this).data('id');
-                $('#blog-delete-last-step-button').attr('data-blog-id', id);
-                //$('#blog-delete-last-step-button').data('blog-id', id);
-                $("#blog-delete-modal").modal('show');
-                $('.modal-body').html(
-                    `
-                     <b class="badge bg-danger">${title}</b> isimli blogu silmek istediğinize emin misiniz?
-                    `
-                )
-            });
-        });
+            
+        }
     </script>
 </body>
 </html>

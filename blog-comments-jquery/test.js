@@ -6,3 +6,11 @@ let info = {
         
     } 
 }; //Object
+
+
+
+let name = "tekin";
+
+let data = {
+    name:name,
+}
