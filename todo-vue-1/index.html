@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+    
+</head>
+<body>
+    <div class="container" id="todo">
+        <div class="row">
+            <div class="col-md-6">
+                <table class="table">
+                    <thead>
+                      <tr class="table-primary">
+                        <th scope="col">#</th>
+                        <th scope="col">Todo</th>
+                        <th scope="col">İşlem</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="todo in todos">
+                            <td>{{todo.id}}</td>
+                            <td>{{todo.todo}}</td>
+                            <td>
+                                <button class="btn btn-danger btn-sm" v-on:click="deleteTodo(todo.id)">SİL</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-6"></div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script>
+        //vue --> view
+        //v-onclick:
+        const TODO = new Vue({
+            el   : '#todo',
+            data : {
+                todos    : [],
+                BASE_URL : "http://localhost:3000",
+                name : '',
+            },
+            methods: {
+                //getTodos(){ },
+                //response => response.json()
+                getTodos : function(){
+                    fetch(`${this.BASE_URL}/todos`)
+                        .then(response => response.json())  //1
+                        .then(data => this.todos = data);   //2
+                },
+                deleteTodo : function(id){
+                    fetch(`${this.BASE_URL}/todos/${id}`,{method: 'DELETE'})
+                        .then(response => response.json())  //1
+                        .then(data =>  this.getTodos());   //2
+                }
+            },
+            beforeCreate : function(){
+                console.log("beforeCreate çalıştı...")
+            },
+            created: function() {
+                console.log("created çalıştı...")
+                this.getTodos();
+            },
+            //created(){}
+        });
+
+        //http://localhost:3000/todos/1 DELETE  --> json   --> GET, POST, PUT, PATCH, DELETE
+
+        //fetch axios
+        //CRUD --> R(Read)
+        /*
+        let info = {
+            name : 'tekin',
+            print(){
+                this.name
+            },
+            test(){
+                this.print()
+            }
+        }
+        */
+
+      
+    </script>
+</body>
+</html>
